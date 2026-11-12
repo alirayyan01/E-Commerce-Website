@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEXON — Luxury Tactical Streetwear</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Three.js for 3D Hero Canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ivory: '#FAF8F3',
+                        midnight: '#08090B',
+                        neon: '#CDF22B',
+                        darkcard: '#121418',
+                        charcoal: '#1A1D24',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAF8F3;
+            color: #08090B;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F3;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #08090B;
+            border-radius: 4px;
+        }
+        .glow-neon:hover {
+            box-shadow: 0 0 25px rgba(205, 242, 43, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-ivory text-midnight antialiased selection:bg-neon selection:text-midnight">
+
+    <!-- Announcement Bar -->
+    <div class="bg-midnight text-ivory text-xs font-medium py-2.5 px-4 text-center tracking-widest uppercase flex items-center justify-center gap-2">
+        <span>⚡ Free Global Express Shipping on Orders Over $150</span>
+        <span class="hidden md:inline opacity-50">|</span>
+        <span class="hidden md:inline">Use Code: <strong>VEXON2026</strong> for 15% Off First Drop</span>
+    </div>
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50 bg-ivory/90 backdrop-blur-md border-b border-midnight/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Mobile Menu Toggle & Logo -->
+            <div class="flex items-center gap-4">
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-midnight hover:text-neon transition-colors" aria-label="Open Menu">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <a href="#" class="font-display text-2xl sm:text-3xl font-bold tracking-tighter uppercase flex items-center gap-1.5">
+                    VEXON<span class="w-2 h-2 rounded-full bg-neon inline-block mb-2"></span>
+                </a>
+            </div>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm tracking-wide">
+                <a href="#home" class="hover:text-neon transition-colors">Home</a>
+                <a href="#catalog" class="hover:text-neon transition-colors">All Men's</a>
+                <a href="#lookbook" class="hover:text-neon transition-colors">Lookbook</a>
+                <a href="#about" class="hover:text-neon transition-colors">About</a>
+            </nav>
+
+            <!-- Actions (Search, Cart) -->
+            <div class="flex items-center gap-4">
+                <button id="search-trigger" class="p-2.5 rounded-full hover:bg-midnight/5 transition-colors flex items-center gap-2 text-sm font-medium" aria-label="Search">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                    <span class="hidden lg:inline text-xs opacity-60 bg-midnight/10 px-2 py-1 rounded">Ctrl+K</span>
+                </button>
+
+                <button id="cart-drawer-toggle" class="relative bg-midnight text-ivory px-4 py-2.5 rounded-full flex items-center gap-2.5 font-medium hover:bg-neon hover:text-midnight transition-all duration-300 shadow-sm" aria-label="Shopping Cart">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span class="hidden sm:inline text-sm">Bag</span>
+                    <span id="cart-counter" class="absolute -top-1.5 -right-1.5 bg-neon text-midnight text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-ivory">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-midnight/80 backdrop-blur-sm hidden transition-opacity">
+        <div class="absolute left-0 top-0 bottom-0 w-80 bg-ivory p-6 flex flex-col justify-between shadow-2xl">
+            <div>
+                <div class="flex items-center justify-between pb-6 border-b border-midnight/10">
+                    <span class="font-display text-2xl font-bold uppercase tracking-tighter">VEXON</span>
+                    <button id="mobile-menu-close" class="p-2 text-midnight hover:text-neon"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <nav class="flex flex-col gap-6 mt-8 font-display text-lg font-semibold uppercase">
+                    <a href="#home" class="mobile-nav-link hover:text-neon">Home</a>
+                    <a href="#catalog" class="mobile-nav-link hover:text-neon">All Men's</a>
+                    <a href="#lookbook" class="mobile-nav-link hover:text-neon">Lookbook</a>
+                    <a href="#about" class="mobile-nav-link hover:text-neon">About</a>
+                </nav>
+            </div>
+            <div class="text-xs opacity-60 py-4 border-t border-midnight/10">
+                © 2026 VEXON Studio. Tactical Luxury Menswear.
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section with Static High-End Minimalist Banner (Replacing 3D Canvas) -->
+    <section id="home" class="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-midnight text-ivory px-4 sm:px-6 lg:px-8 py-20">
+        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#CDF22B_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            <!-- Left Hero Content -->
+            <div class="lg:col-span-7 flex flex-col items-start text-left space-y-6">
+                <div class="inline-flex items-center gap-2 bg-charcoal text-neon px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest border border-neon/20">
+                    <span class="w-2 h-2 rounded-full bg-neon animate-pulse"></span> Fall / Winter 2026 Tactical Drop
+                </div>
+                <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-bold uppercase tracking-tight leading-none">
+                    Engineered <br>for the <span class="text-neon">Urban</span> Apex.
+                </h1>
+                <p class="text-gray-400 text-base sm:text-lg max-w-xl font-light">
+                    Discover high-end luxury tactical streetwear crafted with military-grade resilience, weather-adaptive technical textiles, and avant-garde silhouettes.
+                </p>
+                <div class="flex flex-wrap items-center gap-4 pt-4">
+                    <a href="#catalog" class="bg-neon text-midnight font-display font-bold uppercase px-8 py-4 rounded-full hover:bg-ivory hover:text-midnight transition-all duration-300 shadow-lg glow-neon flex items-center gap-3">
+                        Shop New Drop <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#lookbook" class="border border-ivory/20 text-ivory font-display font-medium uppercase px-8 py-4 rounded-full hover:bg-ivory/10 transition-all duration-300">
+                        Explore Lookbook
+                    </a>
+                </div>
+                <div class="grid grid-cols-3 gap-6 pt-8 border-t border-ivory/10 w-full max-w-lg">
+                    <div>
+                        <div class="font-display text-2xl font-bold text-neon">36+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider">Curated Pieces</div>
+                    </div>
+                    <div>
+                        <div class="font-display text-2xl font-bold text-neon">100%</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider">Waterproof Tech</div>
+                    </div>
+                    <div>
+                        <div class="font-display text-2xl font-bold text-neon">24/7</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider">AI Concierge</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Static High-End Minimalist Banner Card -->
+            <div class="lg:col-span-5 relative flex items-center justify-center">
+                <div class="absolute w-72 h-72 sm:w-96 sm:h-96 bg-neon/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="w-full bg-darkcard border border-ivory/15 rounded-3xl p-6 sm:p-8 shadow-2xl relative z-10 overflow-hidden group">
+                    <div class="absolute top-4 right-4 bg-neon text-midnight text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                        Flagship Drop
+                    </div>
+                    <div class="aspect-[4/3] rounded-2xl overflow-hidden bg-charcoal mb-6 relative">
+                        <img src="https://placehold.co/600x450/121418/CDF22B?text=VEXON+Velocity+Runner+V1" alt="Flagship Drop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90">
+                    </div>
+                    <span class="text-xs font-mono text-neon uppercase tracking-widest">Featured Footwear</span>
+                    <h3 class="font-display text-2xl font-bold uppercase mt-1 text-ivory">VEXON Velocity Runner V1</h3>
+                    <p class="text-gray-400 text-xs mt-2 font-light">Engineered with high-abrasion ballistic mesh and responsive cushioning.</p>
+                    <div class="mt-6 pt-4 border-t border-ivory/10 flex items-center justify-between">
+                        <span class="font-display text-xl font-bold text-ivory">$240.00</span>
+                        <button onclick="addToCart(1)" class="bg-neon text-midnight font-display font-bold uppercase px-5 py-2.5 rounded-xl text-xs hover:bg-ivory transition-colors flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Add to Bag
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Catalog Section -->
+    <section id="catalog" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-midnight/60 block mb-2">The Complete Lineup</span>
+                <h2 class="font-display text-3xl sm:text-5xl font-bold uppercase tracking-tight">Men's Catalog</h2>
+            </div>
+            <!-- Category Tabs -->
+            <div class="flex flex-wrap gap-2" id="category-tabs">
+                <button data-category="All" class="cat-btn bg-midnight text-ivory px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">All Items</button>
+                <button data-category="Shoes" class="cat-btn bg-midnight/5 text-midnight hover:bg-midnight/10 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">Shoes</button>
+                <button data-category="Outerwear" class="cat-btn bg-midnight/5 text-midnight hover:bg-midnight/10 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">Outerwear</button>
+                <button data-category="Hoodies & Tops" class="cat-btn bg-midnight/5 text-midnight hover:bg-midnight/10 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">Hoodies & Tops</button>
+                <button data-category="Bottoms" class="cat-btn bg-midnight/5 text-midnight hover:bg-midnight/10 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">Bottoms</button>
+                <button data-category="Belts" class="cat-btn bg-midnight/5 text-midnight hover:bg-midnight/10 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">Belts</button>
+                <button data-category="Accessories" class="cat-btn bg-midnight/5 text-midnight hover:bg-midnight/10 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all">Accessories</button>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Dynamically populated via JavaScript -->
+        </div>
+    </section>
+
+    <!-- Lookbook Section -->
+    <section id="lookbook" class="py-20 bg-midnight text-ivory px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-neon block mb-2">Visual Campaign</span>
+                <h2 class="font-display text-3xl sm:text-5xl font-bold uppercase tracking-tight">Fall 2026 Lookbook</h2>
+                <p class="text-gray-400 mt-4 text-sm sm:text-base">Designed for nocturnal navigation and high-velocity urban environments.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="relative group overflow-hidden rounded-2xl h-96 bg-darkcard border border-ivory/10">
+                    <img src="https://placehold.co/600x800/121418/CDF22B?text=VEXON+Look+01" alt="Look 01" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-midnight via-transparent to-transparent flex flex-col justify-end p-6">
+                        <span class="text-xs font-mono text-neon uppercase tracking-widest">Look 01 / Apex Operator</span>
+                        <h3 class="font-display text-xl font-bold uppercase mt-1">Tactical Shell & Cargo Ensemble</h3>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden rounded-2xl h-96 bg-darkcard border border-ivory/10">
+                    <img src="https://placehold.co/600x800/121418/CDF22B?text=VEXON+Look+02" alt="Look 02" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-midnight via-transparent to-transparent flex flex-col justify-end p-6">
+                        <span class="text-xs font-mono text-neon uppercase tracking-widest">Look 02 / Night Ops</span>
+                        <h3 class="font-display text-xl font-bold uppercase mt-1">Matrix Hoodie & Technical Jogger</h3>
+                    </div>
+                </div>
+                <div class="relative group overflow-hidden rounded-2xl h-96 bg-darkcard border border-ivory/10">
+                    <img src="https://placehold.co/600x800/121418/CDF22B?text=VEXON+Look+03" alt="Look 03" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-midnight via-transparent to-transparent flex flex-col justify-end p-6">
+                        <span class="text-xs font-mono text-neon uppercase tracking-widest">Look 03 / Urban Nomad</span>
+                        <h3 class="font-display text-xl font-bold uppercase mt-1">VEXON Velocity Runner & Rig Vest</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
+        <span class="text-xs font-bold uppercase tracking-widest text-midnight/60 block mb-2">Our Philosophy</span>
+        <h2 class="font-display text-3xl sm:text-5xl font-bold uppercase tracking-tight mb-8">Crafted Without Compromise</h2>
+        <p class="text-lg sm:text-xl text-gray-700 leading-relaxed font-light mb-12">
+            VEXON bridges the gap between high-fashion luxury tailoring and tactical utility. Every garment is rigorously tested for extreme durability, weather resistance, and uncompromising ergonomic freedom.
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-left">
+            <div class="p-6 bg-white rounded-2xl border border-midnight/10 shadow-sm">
+                <i data-lucide="shield-check" class="w-8 h-8 text-neon mb-4"></i>
+                <h4 class="font-display font-bold uppercase mb-1">Ballistic Cordura</h4>
+                <p class="text-xs text-gray-600">Abrasion-resistant fabrics built to last decades.</p>
+            </div>
+            <div class="p-6 bg-white rounded-2xl border border-midnight/10 shadow-sm">
+                <i data-lucide="zap" class="w-8 h-8 text-neon mb-4"></i>
+                <h4 class="font-display font-bold uppercase mb-1">Modular Design</h4>
+                <p class="text-xs text-gray-600">Detachable tactical rigs and convertible layers.</p>
+            </div>
+            <div class="p-6 bg-white rounded-2xl border border-midnight/10 shadow-sm">
+                <i data-lucide="compass" class="w-8 h-8 text-neon mb-4"></i>
+                <h4 class="font-display font-bold uppercase mb-1">Ergonomic Fit</h4>
+                <p class="text-xs text-gray-600">Engineered articulation for unhindered motion.</p>
+            </div>
+            <div class="p-6 bg-white rounded-2xl border border-midnight/10 shadow-sm">
+                <i data-lucide="truck" class="w-8 h-8 text-neon mb-4"></i>
+                <h4 class="font-display font-bold uppercase mb-1">Express Global</h4>
+                <p class="text-xs text-gray-600">Priority encrypted dispatch to over 120 countries.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-midnight text-ivory pt-16 pb-12 px-4 sm:px-6 lg:px-8 border-t border-ivory/10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div>
+                <a href="#" class="font-display text-2xl font-bold uppercase tracking-tighter flex items-center gap-1.5 mb-4">
+                    VEXON<span class="w-2 h-2 rounded-full bg-neon inline-block mb-2"></span>
+                </a>
+                <p class="text-gray-400 text-sm mb-6 font-light">Luxury tactical streetwear engineered for the modern urban landscape.</p>
+                <div class="flex items-center gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-charcoal flex items-center justify-center hover:bg-neon hover:text-midnight transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-charcoal flex items-center justify-center hover:bg-neon hover:text-midnight transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-charcoal flex items-center justify-center hover:bg-neon hover:text-midnight transition-colors"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-display font-bold uppercase text-sm tracking-wider mb-4 text-neon">Navigation</h4>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><a href="#home" class="hover:text-ivory transition-colors">Home</a></li>
+                    <li><a href="#catalog" class="hover:text-ivory transition-colors">All Men's Catalog</a></li>
+                    <li><a href="#lookbook" class="hover:text-ivory transition-colors">Fall 2026 Lookbook</a></li>
+                    <li><a href="#about" class="hover:text-ivory transition-colors">Brand Philosophy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-display font-bold uppercase text-sm tracking-wider mb-4 text-neon">Customer Service</h4>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-ivory transition-colors">Order Tracking</a></li>
+                    <li><a href="#" class="hover:text-ivory transition-colors">Shipping & Returns</a></li>
+                    <li><a href="#" class="hover:text-ivory transition-colors">Size Guide & Fit</a></li>
+                    <li><a href="#" class="hover:text-ivory transition-colors">Secure Encryption</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-display font-bold uppercase text-sm tracking-wider mb-4 text-neon">Join The Drop List</h4>
+                <p class="text-gray-400 text-sm mb-4 font-light">Subscribe for early access tokens to limited tactical releases.</p>
+                <form onsubmit="event.preventDefault(); showNotification('Successfully subscribed to VIP Drop List!');" class="flex flex-col gap-3">
+                    <input type="email" placeholder="Enter your email" required class="bg-charcoal border border-ivory/20 rounded-xl px-4 py-3 text-sm text-ivory placeholder-gray-500 focus:outline-none focus:border-neon">
+                    <button type="submit" class="bg-neon text-midnight font-display font-bold uppercase px-6 py-3 rounded-xl hover:bg-ivory transition-colors text-sm">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto pt-8 border-t border-ivory/10 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
+            <p>© 2026 VEXON Studio Inc. All rights reserved.</p>
+            <div class="flex items-center gap-6 mt-4 sm:mt-0">
+                <a href="#" class="hover:text-ivory">Privacy Policy</a>
+                <a href="#" class="hover:text-ivory">Terms of Service</a>
+                <a href="#" class="hover:text-ivory">Security</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Drawer -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 bg-midnight/80 backdrop-blur-sm hidden transition-opacity">
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-ivory p-6 sm:p-8 flex flex-col justify-between shadow-2xl transform transition-transform duration-300">
+            <div>
+                <div class="flex items-center justify-between pb-6 border-b border-midnight/10">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="shopping-bag" class="w-6 h-6 text-midnight"></i>
+                        <h3 class="font-display text-xl font-bold uppercase tracking-tight">Your Shopping Bag</h3>
+                    </div>
+                    <button id="cart-drawer-close" class="p-2 hover:bg-midnight/5 rounded-full transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+
+                <!-- Free Shipping Progress -->
+                <div class="py-4 border-b border-midnight/10">
+                    <div class="flex justify-between text-xs font-semibold uppercase mb-2">
+                        <span id="shipping-status-text">Add $150.00 for Free Shipping</span>
+                        <span id="shipping-percent">0%</span>
+                    </div>
+                    <div class="w-full bg-midnight/10 h-2 rounded-full overflow-hidden">
+                        <div id="shipping-progress-bar" class="bg-neon h-full transition-all duration-300 w-0"></div>
+                    </div>
+                </div>
+
+                <!-- Cart Items List -->
+                <div id="cart-items-container" class="mt-6 space-y-4 max-h-[42vh] overflow-y-auto pr-2">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Cart Footer & Checkout -->
+            <div class="pt-6 border-t border-midnight/10">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="font-display text-sm font-semibold uppercase opacity-60">Subtotal</span>
+                    <span id="cart-subtotal" class="font-display text-2xl font-bold">$0.00</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-6">Shipping and taxes calculated during secure checkout.</p>
+                <button id="checkout-btn" onclick="openCheckoutModal()" class="w-full bg-neon text-midnight font-display font-bold uppercase py-4 rounded-xl hover:bg-midnight hover:text-ivory transition-all duration-300 shadow-lg glow-neon flex items-center justify-center gap-2">
+                    <i data-lucide="lock" class="w-5 h-5"></i> Secure Encrypted Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Command Bar Search Modal -->
+    <div id="search-modal" class="fixed inset-0 z-50 bg-midnight/80 backdrop-blur-sm hidden flex items-start justify-center pt-20 px-4">
+        <div class="bg-ivory w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden border border-midnight/10">
+            <div class="p-4 border-b border-midnight/10 flex items-center gap-3">
+                <i data-lucide="search" class="w-5 h-5 text-midnight/50"></i>
+                <input type="text" id="search-input" placeholder="Search shoes, outerwear, hoodies, accessories..." class="w-full bg-transparent text-lg focus:outline-none font-medium placeholder-midnight/40">
+                <button id="search-close" class="text-xs font-mono bg-midnight/10 px-2.5 py-1.5 rounded uppercase">ESC</button>
+            </div>
+            <div id="search-results" class="p-4 max-h-96 overflow-y-auto space-y-2">
+                <div class="text-xs text-midnight/50 text-center py-8">Type to search 36+ tactical luxury items...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secure Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 bg-midnight/80 backdrop-blur-sm hidden flex items-center justify-center px-4">
+        <div class="bg-ivory w-full max-w-lg rounded-3xl p-8 shadow-2xl relative">
+            <button onclick="closeCheckoutModal()" class="absolute top-6 right-6 p-2 hover:bg-midnight/5 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-neon text-midnight rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <h3 class="font-display text-2xl font-bold uppercase">Secure Express Checkout</h3>
+                <p class="text-xs text-gray-500 mt-1">256-Bit SSL Military-Grade Encryption</p>
+            </div>
+            <form onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Full Name</label>
+                    <input type="text" required class="w-full bg-white border border-midnight/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-neon" placeholder="Alex Mercer">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Email Address</label>
+                    <input type="email" required class="w-full bg-white border border-midnight/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-neon" placeholder="alex@vexon.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Shipping Address</label>
+                    <input type="text" required class="w-full bg-white border border-midnight/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-neon" placeholder="742 Evergreen Terrace, Sector 4">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">Card Number</label>
+                        <input type="text" required placeholder="•••• •••• •••• ••••" class="w-full bg-white border border-midnight/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-neon">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">Expiry / CVV</label>
+                        <input type="text" required placeholder="MM/YY • CVV" class="w-full bg-white border border-midnight/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-neon">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-neon text-midnight font-display font-bold uppercase py-4 rounded-xl hover:bg-midnight hover:text-ivory transition-all shadow-lg glow-neon mt-4">
+                    Authorize Payment & Place Order
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 z-50 bg-midnight/80 backdrop-blur-sm hidden flex items-center justify-center px-4">
+        <div class="bg-ivory w-full max-w-md rounded-3xl p-8 text-center shadow-2xl">
+            <div class="w-16 h-16 bg-neon text-midnight rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                <i data-lucide="check" class="w-8 h-8"></i>
+            </div>
+            <h3 class="font-display text-2xl font-bold uppercase mb-2">Order Confirmed!</h3>
+            <p class="text-sm text-gray-600 mb-6">Your tactical luxury drop has been successfully encrypted and dispatched. Tracking details sent via email.</p>
+            <button onclick="closeSuccessModal()" class="bg-midnight text-ivory font-display font-bold uppercase px-8 py-3.5 rounded-xl hover:bg-neon hover:text-midnight transition-colors">Continue Shopping</button>
+        </div>
+    </div>
+
+    <!-- AI Shopping Concierge Widget (Bottom Right) -->
+    <div class="fixed bottom-6 right-6 z-40">
+        <!-- Chat Toggle Button -->
+        <button id="concierge-toggle" class="relative bg-midnight text-ivory w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 transition-transform group" aria-label="AI Shopping Concierge">
+            <i data-lucide="message-square" class="w-6 h-6 text-neon"></i>
+            <!-- WhatsApp Notification Badge -->
+            <span class="absolute -top-1 -right-1 bg-neon text-midnight text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-midnight shadow animate-pulse">1</span>
+        </button>
+
+        <!-- Speech Bubble Popup -->
+        <div id="concierge-bubble" class="absolute bottom-16 right-0 bg-white text-midnight p-4 rounded-2xl shadow-2xl border border-midnight/10 w-72 mb-3 transform transition-all duration-300">
+            <div class="flex items-center justify-between mb-2">
+                <span class="font-display font-bold text-xs uppercase flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span> VEXON AI Concierge
+                </span>
+                <button onclick="toggleConcierge()" class="text-gray-400 hover:text-midnight"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <p class="text-xs text-gray-600 font-medium">"May I help you with sizing, drop availability, or shipping today?"</p>
+        </div>
+
+        <!-- Chat Window -->
+        <div id="concierge-window" class="absolute bottom-20 right-0 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border border-midnight/10 hidden flex flex-col h-[480px] overflow-hidden">
+            <div class="bg-midnight text-ivory p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-charcoal rounded-full flex items-center justify-center text-neon font-display font-bold">VX</div>
+                    <div>
+                        <h4 class="font-display font-bold text-sm uppercase">VEXON Concierge</h4>
+                        <span class="text-[10px] text-green-400 flex items-center gap-1">● Online • AI Assistant</span>
+                    </div>
+                </div>
+                <button id="concierge-close" class="text-gray-400 hover:text-ivory"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50 text-xs">
+                <div class="bg-white p-3 rounded-2xl shadow-sm border border-midnight/5 max-w-[85%]">
+                    <strong>VEXON AI:</strong> Welcome to VEXON. Ask me anything about our tactical footwear, sizing guides, or express global shipping!
+                </div>
+            </div>
+            <!-- Suggestion Chips -->
+            <div class="p-2 bg-white border-t border-gray-100 flex gap-1.5 overflow-x-auto">
+                <button onclick="sendQuickPrompt('What is your sizing guide?')" class="text-[10px] whitespace-nowrap bg-gray-100 hover:bg-midnight hover:text-ivory px-2.5 py-1 rounded-full transition-colors font-medium">📏 Sizing Guide</button>
+                <button onclick="sendQuickPrompt('When is the next drop?')" class="text-[10px] whitespace-nowrap bg-gray-100 hover:bg-midnight hover:text-ivory px-2.5 py-1 rounded-full transition-colors font-medium">⚡ Next Drop</button>
+                <button onclick="sendQuickPrompt('How does shipping work?')" class="text-[10px] whitespace-nowrap bg-gray-100 hover:bg-midnight hover:text-ivory px-2.5 py-1 rounded-full transition-colors font-medium">📦 Shipping</button>
+            </div>
+            <!-- Chat Input -->
+            <div class="p-3 bg-white border-t border-midnight/10 flex items-center gap-2">
+                <input type="text" id="chat-input" placeholder="Type your question..." class="flex-1 bg-gray-100 rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-neon">
+                <button id="chat-send" class="bg-neon text-midnight p-2.5 rounded-xl hover:bg-midnight hover:text-ivory transition-colors"><i data-lucide="send" class="w-4 h-4"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-24 right-6 z-50 bg-midnight text-ivory px-6 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-[-200%] transition-transform duration-300 border border-ivory/10">
+        <i data-lucide="check-circle" class="w-5 h-5 text-neon"></i>
+        <span id="toast-msg" class="text-xs font-medium tracking-wide">Item added to bag successfully</span>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // 36 Curated Men's Tactical Streetwear Items (Strictly excluding underwear)
+        const products = [
+            // Shoes (6 items)
+            { id: 1, name: "VEXON Velocity Runner V1", category: "Shoes", price: 240, tag: "Best Seller", img: "https://placehold.co/600x600/121418/CDF22B?text=VEXON+Velocity+Runner" },
+            { id: 2, name: "Apex Tactical Combat Boot", category: "Shoes", price: 290, tag: "New Drop", img: "https://placehold.co/600x600/121418/CDF22B?text=Combat+Boot" },
+            { id: 3, name: "Nocturnal High-Top Sneaker", category: "Shoes", price: 220, tag: "Limited", img: "https://placehold.co/600x600/121418/CDF22B?text=Nocturnal+High-Top" },
+            { id: 4, name: "Sub-Zero All-Terrain Boot", category: "Shoes", price: 310, tag: "Waterproof", img: "https://placehold.co/600x600/121418/CDF22B?text=Terrain+Boot" },
+            { id: 5, name: "Cyber-Grip Slip-On Runner", category: "Shoes", price: 195, tag: "Sale", img: "https://placehold.co/600x600/121418/CDF22B?text=Grip+Slip-On" },
+            { id: 6, name: "VEXON Apex Trainer Pro", category: "Shoes", price: 260, tag: "New Drop", img: "https://placehold.co/600x600/121418/CDF22B?text=Apex+Trainer" },
+
+            // Outerwear (6 items)
+            { id: 7, name: "Gore-Tex Tactical Shell Jacket", category: "Outerwear", price: 420, tag: "Best Seller", img: "https://placehold.co/600x600/121418/CDF22B?text=Tactical+Shell" },
+            { id: 8, name: "Modular Rig Vest Pro", category: "Outerwear", price: 280, tag: "New Drop", img: "https://placehold.co/600x600/121418/CDF22B?text=Modular+Rig+Vest" },
+            { id: 9, name: "Nomad Heavyweight Parka", category: "Outerwear", price: 480, tag: "Limited", img: "https://placehold.co/600x600/121418/CDF22B?text=Nomad+Parka" },
+            { id: 10, name: "Night-Ops Windbreaker", category: "Outerwear", price: 240, tag: "Waterproof", img: "https://placehold.co/600x600/121418/CDF22B?text=Windbreaker" },
+            { id: 11, name: "Cyberpunk Utility Trench", category: "Outerwear", price: 450, tag: "Exclusive", img: "https://placehold.co/600x600/121418/CDF22B?text=Utility+Trench" },
+            { id: 12, name: "Stealth Bomber Jacket V2", category: "Outerwear", price: 340, tag: "Best Seller", img: "https://placehold.co/600x600/121418/CDF22B?text=Stealth+Bomber" },
+
+            // Hoodies & Tops (6 items)
+            { id: 13, name: "Matrix Heavyweight Hoodie", category: "Hoodies & Tops", price: 180, tag: "Best Seller", img: "https://placehold.co/600x600/121418/CDF22B?text=Matrix+Hoodie" },
+            { id: 14, name: "Tactical Long-Sleeve Combat Tee", category: "Hoodies & Tops", price: 110, tag: "New Drop", img: "https://placehold.co/600x600/121418/CDF22B?text=Combat+Tee" },
+            { id: 15, name: "Over-Dyed Graphic Sweatshirt", category: "Hoodies & Tops", price: 150, tag: "Limited", img: "https://placehold.co/600x600/121418/CDF22B?text=Graphic+Sweatshirt" },
+            { id: 16, name: "Modular Utility Overshirt", category: "Hoodies & Tops", price: 210, tag: "New Drop", img: "https://placehold.co/600x600/121418/CDF22B?text=Utility+Overshirt" },
+            { id: 17, name: "VEXON Signature Box Tee", category: "Hoodies & Tops", price: 85, tag: "Core", img: "https://placehold.co/600x600/121418/CDF22B?text=Signature+Box+Tee" },
+            { id: 18, name: "Nocturnal Zip-Up Hoodie", category: "Hoodies & Tops", price: 195, tag: "Sale", img: "https://placehold.co/600x600/121418/CDF22B?text=Zip-Up+Hoodie" },
+
+            // Bottoms (6 items)
+            { id: 19, name: "Alpha Multi-Pocket Cargo Pant", category: "Bottoms", price: 260, tag: "Best Seller", img: "https://placehold.co/600x600/121418/CDF22B?text=Multi-Pocket+Cargo" },
+            { id: 20, name: "Technical Techwear Jogger", category: "Bottoms", price: 190, tag: "New Drop", img: "https://placehold.co/600x600/121418/CDF22B?text=Techwear+Jogger" },
+            { id: 21, name: "Ballistic Reinforced Denim", category: "Bottoms", price: 240, tag: "Limited", img: "https://placehold.co/600x600/121418/CDF22B?text=Reinforced+Denim" },
+            { id: 22, name: "Utility Tactical Shorts", category: "Bottoms", price: 160, tag: "Summer", img: "https://placehold.co/600x600/121418/CDF22B?text=Tactical+Shorts" },
+            { id: 23, name: "Apex Ripstop Track Pant", category: "Bottoms", price: 175, tag: "Sale", img: "https://placehold.co/600x600/121418/CDF22B?text=Ripstop+Track" },
+            { id: 24, name: "VEXON Heavyweight Sweatpant", category: "Bottoms", price: 155, tag: "Core", img: "https://placehold.co/600x600/121418/CDF22B?text=Heavyweight+Sweatpant" },
+
+            // Belts (6 items)
+            { id: 25, name: "Cobra Buckle Tactical Belt", category: "Belts", price: 95, tag: "Best Seller", img: "https://placehold.co/600x600/121418/CDF22B?text=Cobra+Tactical+Belt" },
+            { id: 26, name: "Industrial Webbing Belt", category: "Belts", price: 75, tag: "New Drop", img: "https://placehold.co/600x600/121418/CDF22B?text=Industrial+Belt" },
+            { id: 27, name: "Modular Molle Utility Belt", category: "Belts", price: 120, tag: "Tactical", img: "https://placehold.co/600x600/121418/CDF22B?text=Molle+Utility+Belt" },
+            { id: 28, name: "Minimalist D-Ring Strap Belt", category: "Belts", price: 65, tag: "Core", img: "https://placehold.co/600x600/121418/CDF22B?text=D-Ring+Belt" },
+            { id: 29, name: "VEXON Leather Duty Belt", category: "Belts", price: 140, tag: "Exclusive", img: "https://placehold.co/600x600/121418/CDF22B?text=Duty+Belt" },
+            { id: 30, name: "Reflective Night Ops Belt", category: "Belts", price: 80, tag: "Limited", img: "https://placehold.co/600x600/121418/CDF22B?text=Reflective+Belt" },
+
+            // Accessories (6 items)
+            { id: 31, name: "Tactical Modular Backpack", category: "Accessories", price: 290, tag: "Best Seller", img: "https://placehold.co/600x600/121418/CDF22B?text=Tactical+Backpack" },
+            { id: 32, name: "Ballistic Crossbody Rig", category: "Accessories", price: 160, tag: "New Drop", img: "https://placehold.co/600x600/121418/CDF22B?text=Crossbody+Rig" },
+            { id: 33, name: "Nocturnal Balaclava Mask", category: "Accessories", price: 55, tag: "Core", img: "https://placehold.co/600x600/121418/CDF22B?text=Balaclava+Mask" },
+            { id: 34, name: "VEXON Technical Cap", category: "Accessories", price: 65, tag: "Best Seller", img: "https://placehold.co/600x600/121418/CDF22B?text=Technical+Cap" },
+            { id: 35, name: "Waterproof Roll-Top Duffle", category: "Accessories", price: 320, tag: "Waterproof", img: "https://placehold.co/600x600/121418/CDF22B?text=Roll-Top+Duffle" },
+            { id: 36, name: "Titanium Carabiner Keychain", category: "Accessories", price: 45, tag: "Accessory", img: "https://placehold.co/600x600/121418/CDF22B?text=Titanium+Carabiner" }
+        ];
+
+        let cart = [];
+
+        // Render Product Catalog
+        function renderProducts(itemsToRender) {
+            const grid = document.getElementById('product-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            if (itemsToRender.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">No tactical items found in this category.</div>`;
+                return;
+            }
+
+            itemsToRender.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "group bg-white rounded-2xl p-4 border border-midnight/10 hover:border-neon transition-all duration-300 shadow-sm flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative overflow-hidden rounded-xl bg-gray-100 aspect-square mb-4">
+                            <span class="absolute top-3 left-3 z-10 bg-midnight text-ivory text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">${product.tag}</span>
+                            <img src="${product.img}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="text-[11px] font-mono uppercase text-gray-500">${product.category}</span>
+                        <h3 class="font-display font-bold text-base mt-1 group-hover:text-neon transition-colors">${product.name}</h3>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-midnight/5 flex items-center justify-between">
+                        <span class="font-display text-xl font-bold">$${product.price.toFixed(2)}</span>
+                        <button onclick="addToCart(${product.id})" class="bg-midnight text-ivory px-4 py-2.5 rounded-xl text-xs font-display font-bold uppercase tracking-wider hover:bg-neon hover:text-midnight transition-colors flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Add to Bag
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Category Filtering
+        const catButtons = document.querySelectorAll('.cat-btn');
+        catButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                catButtons.forEach(b => {
+                    b.classList.remove('bg-midnight', 'text-ivory');
+                    b.classList.add('bg-midnight/5', 'text-midnight');
+                });
+                e.target.classList.remove('bg-midnight/5', 'text-midnight');
+                e.target.classList.add('bg-midnight', 'text-ivory');
+
+                const selectedCat = e.target.getAttribute('data-category');
+                if (selectedCat === 'All') {
+                    renderProducts(products);
+                } else {
+                    const filtered = products.filter(p => p.category === selectedCat);
+                    renderProducts(filtered);
+                }
+            });
+        });
+
+        // Cart Functionality
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            updateCartUI();
+            showNotification(`Added "${product.name}" to your bag.`);
+        }
+
+        function updateCartQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== productId);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const counter = document.getElementById('cart-counter');
+            const container = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const progressBar = document.getElementById('shipping-progress-bar');
+            const shippingStatus = document.getElementById('shipping-status-text');
+            const shippingPercent = document.getElementById('shipping-percent');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            counter.textContent = totalItems;
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+
+            // Shipping Progress (Free at $150)
+            const freeShippingThreshold = 150;
+            const progress = Math.min((subtotal / freeShippingThreshold) * 100, 100);
+            progressBar.style.width = `${progress}%`;
+            shippingPercent.textContent = `${Math.round(progress)}%`;
+
+            if (subtotal >= freeShippingThreshold) {
+                shippingStatus.textContent = "🎉 Free Express Shipping Unlocked!";
+            } else {
+                const diff = freeShippingThreshold - subtotal;
+                shippingStatus.textContent = `Add $${diff.toFixed(2)} more for Free Shipping`;
+            }
+
+            container.innerHTML = '';
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-gray-400 text-xs">Your shopping bag is currently empty.</div>`;
+                return;
+            }
+
+            cart.forEach(item => {
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between gap-4 p-3 bg-white rounded-xl border border-midnight/5";
+                row.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg bg-gray-100">
+                    <div class="flex-1">
+                        <h4 class="font-display font-bold text-xs uppercase">${item.name}</h4>
+                        <span class="text-xs font-mono text-gray-500">$${item.price.toFixed(2)}</span>
+                        <div class="flex items-center gap-2 mt-2">
+                            <button onclick="updateCartQuantity(${item.id}, -1)" class="w-6 h-6 bg-gray-100 rounded flex items-center justify-center font-bold hover:bg-midnight hover:text-ivory">-</button>
+                            <span class="text-xs font-bold">${item.quantity}</span>
+                            <button onclick="updateCartQuantity(${item.id}, 1)" class="w-6 h-6 bg-gray-100 rounded flex items-center justify-center font-bold hover:bg-midnight hover:text-ivory">+</button>
+                        </div>
+                    </div>
+                    <span class="font-display font-bold text-sm">$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                container.appendChild(row);
+            });
+            lucide.createIcons();
+        }
+
+        // Notification Toast
+        function showNotification(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.textContent = msg;
+            toast.classList.remove('translate-y-[-200%]');
+            setTimeout(() => {
+                toast.classList.add('translate-y-[-200%]');
+            }, 3000);
+        }
+
+        // Drawer Toggles
+        const cartToggle = document.getElementById('cart-drawer-toggle');
+        const cartClose = document.getElementById('cart-drawer-close');
+        const cartDrawer = document.getElementById('cart-drawer');
+
+        cartToggle.addEventListener('click', () => { cartDrawer.classList.remove('hidden'); });
+        cartClose.addEventListener('click', () => { cartDrawer.classList.add('hidden'); });
+
+        // Mobile Menu Toggles
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => { mobileMenu.classList.remove('hidden'); });
+        mobileMenuClose.addEventListener('click', () => { mobileMenu.classList.add('hidden'); });
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => { mobileMenu.classList.add('hidden'); });
+        });
+
+        // Command Search Modal
+        const searchTrigger = document.getElementById('search-trigger');
+        const searchModal = document.getElementById('search-modal');
+        const searchClose = document.getElementById('search-close');
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+
+        searchTrigger.addEventListener('click', () => {
+            searchModal.classList.remove('hidden');
+            searchInput.focus();
+        });
+        searchClose.addEventListener('click', () => { searchModal.classList.add('hidden'); });
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchModal.classList.remove('hidden');
+                searchInput.focus();
+            }
+            if (e.key === 'Escape') {
+                searchModal.classList.add('hidden');
+                cartDrawer.classList.add('hidden');
+                document.getElementById('checkout-modal').classList.add('hidden');
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            if (!query) {
+                searchResults.innerHTML = `<div class="text-xs text-midnight/50 text-center py-8">Type to search 36+ tactical luxury items...</div>`;
+                return;
+            }
+            const matches = products.filter(p => p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query));
+            searchResults.innerHTML = '';
+            if (matches.length === 0) {
+                searchResults.innerHTML = `<div class="text-xs text-gray-500 text-center py-8">No matching tactical gear found.</div>`;
+                return;
+            }
+            matches.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between p-3 hover:bg-gray-100 rounded-xl cursor-pointer transition-colors";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="${item.img}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg">
+                        <div>
+                            <h4 class="font-display font-bold text-xs uppercase">${item.name}</h4>
+                            <span class="text-[10px] text-gray-500 uppercase">${item.category}</span>
+                        </div>
+                    </div>
+                    <span class="font-display font-bold text-sm">$${item.price.toFixed(2)}</span>
+                `;
+                div.addEventListener('click', () => {
+                    addToCart(item.id);
+                    searchModal.classList.add('hidden');
+                    cartDrawer.classList.remove('hidden');
+                });
+                searchResults.appendChild(div);
+            });
+        });
+
+        // Checkout Modals
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                showNotification('Your bag is empty. Add items before checkout.');
+                return;
+            }
+            document.getElementById('cart-drawer').classList.add('hidden');
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+        function handleCheckoutSubmit(e) {
+            e.preventDefault();
+            document.getElementById('checkout-modal').classList.add('hidden');
+            document.getElementById('success-modal').classList.remove('hidden');
+            cart = [];
+            updateCartUI();
+        }
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        // AI Concierge Chatbot
+        const conciergeToggle = document.getElementById('concierge-toggle');
+        const conciergeWindow = document.getElementById('concierge-window');
+        const conciergeBubble = document.getElementById('concierge-bubble');
+        const conciergeClose = document.getElementById('concierge-close');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        const chatMessages = document.getElementById('chat-messages');
+
+        conciergeToggle.addEventListener('click', () => {
+            conciergeWindow.classList.toggle('hidden');
+            conciergeBubble.classList.add('hidden');
+        });
+        conciergeClose.addEventListener('click', () => {
+            conciergeWindow.classList.add('hidden');
+        });
+
+        // Auto hide bubble after 6s
+        setTimeout(() => {
+            conciergeBubble.classList.add('opacity-0', 'pointer-events-none');
+        }, 6000);
+
+        function sendQuickPrompt(text) {
+            chatInput.value = text;
+            handleUserMessage();
+        }
+
+        function handleUserMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // User msg
+            const userMsg = document.createElement('div');
+            userMsg.className = "bg-midnight text-ivory p-3 rounded-2xl shadow-sm ml-auto max-w-[85%] text-right";
+            userMsg.innerHTML = `<strong>You:</strong> ${text}`;
+            chatMessages.appendChild(userMsg);
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // AI Reply simulation
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = "bg-white p-3 rounded-2xl shadow-sm border border-midnight/5 max-w-[85%]";
+                
+                let reply = "Our tactical luxury items feature true-to-size athletic fits with ergonomic articulation. All orders above $150 qualify for free express global shipping!";
+                const lower = text.toLowerCase();
+                if (lower.includes('size') || lower.includes('sizing')) {
+                    reply = "VEXON garments use an advanced athletic cut. If you prefer an oversized streetwear look, we recommend sizing up one notch.";
+                } else if (lower.includes('drop') || lower.includes('when')) {
+                    reply = "Our Fall/Winter 2026 Drop is live right now with 36 curated pieces across shoes, outerwear, and tactical gear!";
+                } else if (lower.includes('shipping') || lower.includes('deliver')) {
+                    reply = "We dispatch via encrypted global express courier (DHL / FedEx Priority). Delivery takes 2-4 business days worldwide.";
+                }
+
+                aiMsg.innerHTML = `<strong>VEXON AI:</strong> ${reply}`;
+                chatMessages.appendChild(aiMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 600);
+        }
+
+        chatSend.addEventListener('click', handleUserMessage);
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleUserMessage();
+        });
+
+        // Initialize App on Window Load (Without 3D Canvas)
+        window.onload = function() {
+            renderProducts(products);
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        };
+    </script>
+</body>
+</html>
